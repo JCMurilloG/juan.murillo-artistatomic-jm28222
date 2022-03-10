@@ -1,0 +1,206 @@
+{
+    "kind": "List",
+    "apiVersion": "v1",
+    "metadata": {},
+    "items": [
+        {
+            "apiVersion": "apps.openshift.io/v1",
+            "kind": "DeploymentConfig",
+            "metadata": {
+                "labels": {
+                    "application": "artistatomic-jm28222",
+                    "pipelineLabel": "artistatomic-jm28222",
+                    "template": "deployment-route-service-template23"
+                },
+                "name": "artistatomic-jm28222",
+                "namespace": "odbootcamp-dev"
+            },
+            "spec": {
+                "replicas": "1",
+                "revisionHistoryLimit": 5,
+                "selector": {
+                    "deploymentConfig": "artistatomic-jm28222"
+                },
+                "strategy": {
+                    "type": "Rolling"
+                },
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "application": "artistatomic-jm28222",
+                            "deploymentConfig": "artistatomic-jm28222",
+                            "pipelineLabel": "artistatomic-jm28222"
+                        },
+                        "name": "artistatomic-jm28222"
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "JWS_ADMIN_USERNAME",
+                                        "value": "xTviDe5g"
+                                    },
+                                    {
+                                        "name": "JWS_ADMIN_PASSWORD",
+                                        "value": "Wj11Ymca"
+                                    },
+                                    {
+                                        "name": "JAVA_OPTS",
+                                        "value": "-javaagent:/tmp/src/AppDynamics/javaagent.jar -Dappdynamics.agent.logs.dir=/tmp/logs -Dappdynamics.agent.tls.allowedAlgorithms=SSLv3,TLSv1,TLSv1.1,TLSv1.2 -Dappdynamics.agent.reuse.nodeName=true -Dappdynamics.agent.reuse.nodeName.prefix='artistatomic-jm28222'-pod -Dappdynamics.jvm.shutdown.mark.node.as.historical=true -Dappdynamics.analytics.agent.url=http://analytics-proxy:9090/v2/sinks/bt"
+                                    },
+                                    {
+                                        "name": "JAVA_OPTIONS",
+                                        "value": "-javaagent:/tmp/src/AppDynamics/javaagent.jar -Dappdynamics.agent.logs.dir=/tmp/logs -Dappdynamics.agent.tls.allowedAlgorithms=SSLv3,TLSv1,TLSv1.1,TLSv1.2 -Dappdynamics.agent.reuse.nodeName=true -Dappdynamics.agent.reuse.nodeName.prefix='artistatomic-jm28222'-pod -Dappdynamics.jvm.shutdown.mark.node.as.historical=true -Dappdynamics.analytics.agent.url=http://analytics-proxy:9090/v2/sinks/bt"
+                                    },
+                                    {
+                                        "name": "APPDYNAMICS_AGENT_NODE_NAME",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "fieldPath": "metadata.name"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "APPDYNAMICS_AGENT_TIER_NAME",
+                                        "value": "odbootcamp-dev"
+                                    },
+                                    {
+                                        "name": "APPDYNAMICS_CONTROLLER_PORT",
+                                        "value": "443"
+                                    },
+                                    {
+                                        "name": "APPDYNAMICS_CONTROLLER_SSL_ENABLED",
+                                        "value": "true"
+                                    },
+                                    {
+                                        "name": "APPDYNAMICS_AGENT_APPLICATION_NAME",
+                                        "value": "artistatomic-jm28222"
+                                    }
+                                ],
+                                "envFrom": [
+                                    {
+                                        "configMapRef": {
+                                            "name": "artistatomic-jm28222"
+                                        }
+                                    }
+                                ],
+                                "image": "artifactory.paas-tools.prod.travelport.io/snapshot/artistatomic-jm28222:latest",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "artistatomic-jm28222",
+                                "ports": [
+                                    {
+                                        "containerPort": 8778,
+                                        "name": "jolokia",
+                                        "protocol": "TCP"
+                                    },
+                                    {
+                                        "containerPort": 8080,
+                                        "name": "http",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "readinessProbe": {
+                                    "httpGet": {
+                                        "path": "/artistatomic-jm28222/readiness",
+                                        "port": 8080
+                                    },
+                                    "initialDelaySeconds": "30",
+                                    "periodSeconds": "10"
+                                }
+                            }
+                        ],
+                        "terminationGracePeriodSeconds": 60
+                    }
+                },
+                "triggers": []
+            }
+        },
+        {
+            "apiVersion": "route.openshift.io/v1",
+            "id": "artistatomic-jm28222-http",
+            "kind": "Route",
+            "metadata": {
+                "annotations": {
+                    "description": "Route for application's service.",
+                    "haproxy.router.openshift.io/timeout": "100s"
+                },
+                "labels": {
+                    "application": "artistatomic-jm28222",
+                    "pipelineLabel": "artistatomic-jm28222",
+                    "template": "deployment-route-service-template23"
+                },
+                "name": "artistatomic-jm28222",
+                "namespace": "odbootcamp-dev"
+            },
+            "spec": {
+                "host": "",
+                "tls": {
+                    "insecureEdgeTerminationPolicy": "Allow",
+                    "termination": "edge"
+                },
+                "to": {
+                    "name": "artistatomic-jm28222"
+                }
+            }
+        },
+        {
+            "apiVersion": "route.openshift.io/v1",
+            "id": "artistatomic-jm28222-http-gslb",
+            "kind": "Route",
+            "metadata": {
+                "annotations": {
+                    "description": "GSLB Route for application's service.",
+                    "haproxy.router.openshift.io/timeout": "100s"
+                },
+                "labels": {
+                    "application": "artistatomic-jm28222",
+                    "pipelineLabel": "artistatomic-jm28222",
+                    "template": "deployment-route-service-template23"
+                },
+                "name": "artistatomic-jm28222-gslb",
+                "namespace": "odbootcamp-dev"
+            },
+            "spec": {
+                "host": "artistatomic-jm28222-odbootcamp-dev.cloudapps.nonprod.travelport.io",
+                "tls": {
+                    "insecureEdgeTerminationPolicy": "Allow",
+                    "termination": "edge"
+                },
+                "to": {
+                    "name": "artistatomic-jm28222"
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "annotations": {
+                    "description": "Service for application."
+                },
+                "labels": {
+                    "application": "artistatomic-jm28222",
+                    "pipelineLabel": "artistatomic-jm28222",
+                    "template": "deployment-route-service-template23"
+                },
+                "name": "artistatomic-jm28222",
+                "namespace": "odbootcamp-dev"
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "8080-tcp",
+                        "port": 8080,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "application": "artistatomic-jm28222",
+                    "deploymentConfig": "artistatomic-jm28222"
+                }
+            }
+        }
+    ]
+}

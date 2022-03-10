@@ -1,0 +1,20 @@
+---
+- name: Build Settings
+  artifactLocation: "./target/artistatomic-jm28222.war"
+- name: Base Settings
+# TODO change the Git Url to your service project's envconfigmaps Url
+  configMapGitUrl: "https://github.com/Travelport-Enterprise/{user.name}-artistatomic-jm28222-envconfigmaps.git"
+# TODO change the Branch to the branch that the envconfigmaps is on (with GitHub it should be main)
+  configMapBranch: "main"
+  configMapLocation: "./"
+# configMapFileName defaults to "openshift-env.yml"
+  configMapFileName: ""
+# configMapName defaults to the service name, as specified in the ServiceNow form
+# and in the CloudBees deploy pipeline script parameter
+  configMapName: ""
+  readinessProbeURI: "/artistatomic-jm28222/readiness"
+# TODO change the imageOwner email address to your email
+  imageOwner: "jd.smith@travelport.com"
+- name: DEV Settings
+  env: "dev"
+...

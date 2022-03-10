@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<bean id="invocationManager" class="com.travelport.odt.restfw.consumer.RESTInvocationManager">
+		<property name="resourceManagers">
+			<list>
+				<!-- <ref bean="localResourceManager" /> -->
+			</list>
+		</property>
+		<property name="defaultResourceManager" ref="remoteResourceManager" />
+	</bean>
+	
+	<bean id="remoteResourceManager" class="com.travelport.odt.restfw.consumer.RemoteResourceManager">
+		<constructor-arg type="com.travelport.odt.restfw.common.Environment" name="environment"
+			value="${com.travelport.odt.restfw.env}" />
+		<constructor-arg type="java.lang.String" name="connectionString"
+			value="${com.travelport.odt.restfw.zookeeper}" />
+	</bean>
+	
+	<bean id="serviceRegistrar" class="com.travelport.odt.restfw.provider.ServiceRegistrar">
+		<constructor-arg type="com.travelport.odt.restfw.common.Environment" name="environment"
+			value="${com.travelport.odt.restfw.env}" />
+		<constructor-arg type="java.lang.String" name="connectionString"
+			value="${com.travelport.odt.restfw.zookeeper}" />
+		<property name="registrations">
+			<util:list>
+				<ref bean="serviceRegistration" />
+			</util:list>
+		</property>
+		<property name="ip" value="${com.travelport.odt.restfw.registration.ip:#{null}}" />
+        <property name="port" value="${com.travelport.odt.restfw.registration.port:#{null}}" />     
+        <property name="contextPath" value="${com.travelport.odt.restfw.registration.contextPath:#{null}}" />
+        <property name="baseUrl" value="${com.travelport.odt.restfw.registration.baseUrl:#{null}}" />
+	</bean>	
+
+	<bean id="serviceRegistration" class="com.travelport.odt.restfw.provider.ServiceRegistration">
+		<property name="systemId"
+			value="${com.travelport.odt.restfw.registration.systemId}" />
+		<property name="suppliers"
+			value="${com.travelport.odt.restfw.registration.suppliers:#{null}}" />
+		<property name="swaggerURL">
+			<util:list>
+				<value>${com.travelport.odt.restfw.registration.swaggerURL}</value> 
+			</util:list>
+		</property>			
+	</bean>
+
+</beans>

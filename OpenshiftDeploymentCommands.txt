@@ -1,0 +1,57 @@
+# This OpenShift command line file is provided with the basicrestframework-archetype
+# which is used for the ODBC-101 course. The script is provided as a convenience for
+# the ODBC students to deploy the service from the Openshift command line.
+
+# Important note:  This script is based on the PaaS library version 2.3.0
+# From the generated pipeline in CloudBees project:  @Library('OCPSharedLibrary@PAAS-2.3.0')
+
+# TODO Substitute studentX with your student name (this will be done automatically by the archetype)
+
+# build the war file
+mvn clean install
+
+#Copy Login command from the Openshift portal under your name labelled in the upper right corner
+oc login https://console.ocp-b.zu2.nonprod.travelport.io --token=<hidden>
+
+oc process ocpbuildproject//build-template3 -p namespace=odbootcamp-dev -p applicationName=artistatomic-jm28222 -p baseImage=jboss-webserver-31-tomcat8-openshift:1.4 -p externalRegistryHostName=artifactory.paas-tools.prod.travelport.io -p pushSecret=artifactory -p snapshotOrRelease=snapshot -p imageName=artistatomic-jm28222 -p tag=latest -p label=artistatomic-jm28222 > build-template3.txt
+
+oc create -f build-template3.txt -n odbootcamp-dev
+
+# errors with No resources found
+oc get dc artistatomic-jm28222
+
+oc process ocpbuildproject//deployment-route-service-template23 -p namespace=odbootcamp-dev -p applicationName=artistatomic-jm28222 -p configMapName=artistatomic-jm28222 -p readinessProbeURI=/artistatomic-jm28222/readiness -p readinessProbeInitialDelaySeconds=30 -p readinessProbePeriodSeconds=10 -p routerTimeout=100s -p externalRegistryHostName=artifactory.paas-tools.prod.travelport.io -p gslb_host=artistatomic-jm28222-odbootcamp-dev.cloudapps.nonprod.travelport.io -p snapshotOrRelease=snapshot -p imageName=artistatomic-jm28222 -p tag=latest -p appDappName=artistatomic-jm28222 -p appDTierName=odbootcamp-dev -p label=artistatomic-jm28222 > deployment-route-service-template23.txt
+
+oc create -f deployment-route-service-template23.txt -n odbootcamp-dev
+
+oc annotate dc/artistatomic-jm28222 collectord.io/logs-output=devnull
+
+mkdir OCPBinaryFolder
+
+curl -o appdynamicsagent.zip http://maven-repo2.tvlport.com:8082/repository/thirdparty/com/travelport/monitor/appd/AppServerAgent/4.5.15.1/AppServerAgent-4.5.15.1.jar
+
+"C:\Program Files\7-Zip\7z" x appdynamicsagent.zip -oOCPBinaryFolder\AppDynamics
+
+copy target\*.war OCPBinaryFolder
+
+tar -C OCPBinaryFolder -czvf archive.tar.gz .
+
+oc start-build artistatomic-jm28222 -n odbootcamp-dev --from-archive=archive.tar.gz -F
+
+oc set env dc/artistatomic-jm28222 ROUTE=artistatomic-jm28222-odbootcamp-dev.ocp-a.hc1.nonprod.travelport.io
+
+oc label dc/artistatomic-jm28222 author=jd.smith --overwrite=true
+
+# fails because no config map yet
+oc get cm/artistatomic-jm28222 -n odbootcamp-dev
+
+# fails because no config map yet
+oc delete configmap artistatomic-jm28222 -n odbootcamp-dev
+
+oc create configmap artistatomic-jm28222 -n odbootcamp-dev --from-file=envconfigmap --from-literal name=DEV --from-literal env=dev  --from-literal DATABASE_URL=http://url/to/database --from-literal DATABASE_USERNAME=dbusername --from-literal DATABASE_PASSWORD=dbpassword
+
+oc adm prune deployments --keep-complete=3 --namespace=odbootcamp-dev --confirm
+
+oc rollout latest dc/artistatomic-jm28222
+
+oc rollout status dc/artistatomic-jm28222

@@ -1,0 +1,60 @@
+{
+    "kind": "List",
+    "apiVersion": "v1",
+    "metadata": {},
+    "items": [
+        {
+            "apiVersion": "build.openshift.io/v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "labels": {
+                    "application": "artistatomic-jm28222",
+                    "pipelineLabel": "artistatomic-jm28222",
+                    "template": "build-template3"
+                },
+                "name": "artistatomic-jm28222",
+                "namespace": "odbootcamp-dev"
+            },
+            "spec": {
+                "failedBuildHistoryLimit": 3,
+                "output": {
+                    "pushSecret": {
+                        "name": "artifactory"
+                    },
+                    "to": {
+                        "kind": "DockerImage",
+                        "name": "artifactory.paas-tools.prod.travelport.io/snapshot/artistatomic-jm28222:latest"
+                    }
+                },
+                "source": {
+                    "binary": {},
+                    "type": "Binary"
+                },
+                "strategy": {
+                    "sourceStrategy": {
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "artifactory.paas-tools.prod.travelport.io/base-images/jboss-webserver-31-tomcat8-openshift:1.4",
+                            "namespace": ""
+                        }
+                    },
+                    "type": "Source"
+                },
+                "successfulBuildHistoryLimit": 3
+            }
+        },
+        {
+            "apiVersion": "image.openshift.io/v1",
+            "kind": "ImageStream",
+            "metadata": {
+                "labels": {
+                    "application": "artistatomic-jm28222",
+                    "pipelineLabel": "artistatomic-jm28222",
+                    "template": "build-template3"
+                },
+                "name": "artistatomic-jm28222",
+                "namespace": "odbootcamp-dev"
+            }
+        }
+    ]
+}

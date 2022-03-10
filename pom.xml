@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.travelport.odbootcamp</groupId>
+        <artifactId>odbootcamp-parent</artifactId>
+        <version>4.8.0.0-SNAPSHOT</version>
+    </parent>
+
+	<groupId>com.travelport.odbootcamp</groupId>
+	<artifactId>artistatomic-jm28222</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	
+	<packaging>war</packaging>
+	<name>artistatomic-jm28222</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<log4j-slf4j.version>2.1</log4j-slf4j.version>
+	</properties>
+	<dependencies>
+	    <dependency>
+		  <groupId>com.travelport.odbootcamp</groupId>
+		  <artifactId>mp3player-model</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+	    </dependency>
+		<dependency>
+			<groupId>com.travelport.odt.restfw.generated.core</groupId>
+			<artifactId>Generated-core</artifactId>
+		</dependency>
+		<!-- needed for service registration so clients can access it -->
+		<dependency>
+			<groupId>com.travelport.odt.restfw</groupId>
+			<artifactId>rest-framework-provider</artifactId>
+		</dependency>
+		<!-- needed if the service is going to consume other Greenfield REST Framework services -->
+		<!-- provides the InvocationManager -->
+		<dependency>
+			<groupId>com.travelport.odt.restfw</groupId>
+			<artifactId>rest-framework-consumer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.travelport.odt.restfw</groupId>
+			<artifactId>rest-framework-common</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>com.travelport.taf</groupId>
+            <artifactId>taf-auditor</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j-slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<!-- for eLogging
+		<dependency>
+            <groupId>com.travelport.soa.lib.common.technical.logging</groupId>
+            <artifactId>EnterpriseLoggingClientProject</artifactId>
+        </dependency>
+		<dependency>
+		    <groupId>com.lmax</groupId>
+		    <artifactId>disruptor</artifactId>
+		</dependency>
+		-->
+		
+		<!-- for testing -->
+		<dependency> <!-- Must be declared before junit -->
+			<groupId>org.jmockit</groupId>
+			<artifactId>jmockit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId> 
+                <artifactId>maven-source-plugin</artifactId> 
+            </plugin> 
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId> 
+                <artifactId>maven-javadoc-plugin</artifactId> 
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+		</plugins>
+		<finalName>artistatomic-jm28222</finalName>
+	</build>
+	
+<!--TODO uncomment when release builds are needed, and change the git repository location to your repository
+  <scm>
+    <connection>scm:git:https://gitbucket.tvlport.com/git/studentX/artistatomic-jm28222.git</connection>
+    <developerConnection>scm:git:https://gitbucket.tvlport.com/git/studentX/artistatomic-jm28222.git</developerConnection>
+  </scm>
+-->  
+	
+</project>
