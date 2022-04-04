@@ -22,7 +22,7 @@
 	<dependencies>
 	    <dependency>
 		  <groupId>com.travelport.odbootcamp</groupId>
-		  <artifactId>mp3player-model</artifactId>
+		  <artifactId>mp3player-model</artifactId> 
 		  <version>1.0.0-SNAPSHOT</version>
 	    </dependency>
 		<dependency>
